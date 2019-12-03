@@ -35,10 +35,7 @@
 // The fuel required by a module of mass 100756 and its fuel is: 33583 + 11192 + 3728 + 1240 + 411 + 135 + 43 + 12 + 2 = 50346.
 // What is the sum of the fuel requirements for all of the modules on your spacecraft when also taking into account the mass of the added fuel? (Calculate the fuel requirements for each module separately, then add them all up at the end.)
 
-// Although it hasn't changed, you can still get your puzzle input.
-
-
-
+// Your puzzle answer was 5175499.
 
 const rawInput1 = `53247
 140268
@@ -143,6 +140,19 @@ const rawInput1 = `53247
 
 const input1 = rawInput1.split('\n').filter(Boolean).map(x => parseInt(x));
 
-const result1 = input1.reduce((a, v) => a + Math.floor(v / 3) - 2, 0);
+const result1a = input1.reduce((a, v) => a + Math.floor(v / 3) - 2, 0);
 
-console.log(result1);
+console.log(result1a);
+
+const result1b = input1.reduce((accumulator, currentValue) => {
+    let currentStage = Math.floor(currentValue / 3) - 2;
+    let total = currentStage;
+    while (currentStage > 6) {
+        currentStage = Math.max(Math.floor(currentStage / 3) - 2, 0);
+        total += currentStage;
+    }
+
+    return accumulator + total;
+}, 0);
+
+console.log(result1b);

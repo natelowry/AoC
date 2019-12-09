@@ -84,11 +84,11 @@ const input7 = [3, 8, 1001, 8, 10, 8, 105, 1, 0, 0, 21, 34, 51, 76, 101, 114, 19
 
 //const input7 = [3, 23, 3, 24, 1002, 24, 10, 24, 1002, 23, -1, 23, 101, 5, 23, 23, 1, 24, 23, 23, 4, 23, 99, 0, 0];
 
-let nextInput = 0;
-let highestValue = 0;
+let nextInput7 = 0;
+let highestValue7 = 0;
 
 for (let j = 0; j < 10000 * 5 * 4 * 3 * 2 * 1; j++) {
-    nextInput = 0;
+    nextInput7 = 0;
 
     let phaseSequence = [0, 1, 2, 3, 4];
     phaseSequence = phaseSequence.sort((a, b) => Math.random() - .5);
@@ -100,10 +100,10 @@ for (let j = 0; j < 10000 * 5 * 4 * 3 * 2 * 1; j++) {
         compute(input7.slice(), element);
     }
 
-    if (nextInput > highestValue) {
-        console.log(`${phaseSequence} ${nextInput}`); // 1,3,0,4,2 38834
+    if (nextInput7 > highestValue7) {
+        console.log(`${phaseSequence} ${nextInput7}`); // 1,3,0,4,2 38834
 
-        highestValue = nextInput;
+        highestValue7 = nextInput7;
     }
 }
 
@@ -142,13 +142,13 @@ function compute(newInput, phase) {
             if (!seenAnInput) {
                 newInput[newInput[index + 1]] = phase;
             } else {
-                newInput[newInput[index + 1]] = nextInput;
+                newInput[newInput[index + 1]] = nextInput7;
             }
             seenAnInput = true;
             index += 2;
         } else if (opcode === 4) {
             //Opcode 4 outputs the value of its only parameter. For example, the instruction 4,50 would output the value at address 50.
-            nextInput = firstParam;
+            nextInput7 = firstParam;
             //console.log(nextInput);
             index += 2;
         } else if (opcode === 5) {

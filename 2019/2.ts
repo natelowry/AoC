@@ -75,20 +75,20 @@ const rawInput2 = "1,0,0,3,1,1,2,3,1,3,4,3,1,5,0,3,2,13,1,19,1,19,9,23,1,5,23,27
 
 const input2 = rawInput2.split(",").map(x => parseInt(x));
 const input2a = input2.slice();
-var index = 0;
-var current = 0;
+let index2 = 0;
+let current2 = 0;
 input2a[1] = 12;
 input2a[2] = 2;
 
 
-while (current !== 99) {
-    current = input2a[index];
-    if (current === 1) {
-        input2a[input2a[index + 3]] = input2a[input2a[index + 1]] + input2a[input2a[index + 2]];
-    } else if (current === 2) {
-        input2a[input2a[index + 3]] = input2a[input2a[index + 1]] * input2a[input2a[index + 2]];
+while (current2 !== 99) {
+    current2 = input2a[index2];
+    if (current2 === 1) {
+        input2a[input2a[index2 + 3]] = input2a[input2a[index2 + 1]] + input2a[input2a[index2 + 2]];
+    } else if (current2 === 2) {
+        input2a[input2a[index2 + 3]] = input2a[input2a[index2 + 1]] * input2a[input2a[index2 + 2]];
     }
-    index += 4;
+    index2 += 4;
 }
 
 console.log(input2a[0]);
@@ -100,17 +100,17 @@ while (true) {
     const newInput = input2.slice();
     newInput[1] = r1;
     newInput[2] = r2;
-    var index = 0;
-    var current = 0;
+    index2 = 0;
+    current2 = 0;
 
-    while (current !== 99 && index < newInput.length) {
-        current = newInput[index];
-        if (current === 1) {
-            newInput[newInput[index + 3]] = newInput[newInput[index + 1]] + newInput[newInput[index + 2]];
-        } else if (current === 2) {
-            newInput[newInput[index + 3]] = newInput[newInput[index + 1]] * newInput[newInput[index + 2]];
+    while (current2 !== 99 && index2 < newInput.length) {
+        current2 = newInput[index2];
+        if (current2 === 1) {
+            newInput[newInput[index2 + 3]] = newInput[newInput[index2 + 1]] + newInput[newInput[index2 + 2]];
+        } else if (current2 === 2) {
+            newInput[newInput[index2 + 3]] = newInput[newInput[index2 + 1]] * newInput[newInput[index2 + 2]];
         }
-        index += 4;
+        index2 += 4;
     }
 
     const res = newInput[0];

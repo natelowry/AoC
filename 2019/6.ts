@@ -138,14 +138,14 @@ const input6 = ["36S)VWN", "6FM)RNW", "S2M)329", "DQ3)5CD", "XYW)X2Y", "LFS)LXR"
 //     "I)SAN",
 // ];
 
-const nodes = [];
+const nodes6 = [];
 
 for (let i = 0; i < input6.length; i++) {
     const [left, right] = input6[i].split(")");
 
-    nodes[right] = nodes[right] || { label: right, orbitedBy: [], currentDepth: 0 };
-    nodes[left] = nodes[left] || { label: left, orbitedBy: [], currentDepth: 0 };
-    nodes[left].orbitedBy.push(nodes[right]);
+    nodes6[right] = nodes6[right] || { label: right, orbitedBy: [], currentDepth: 0 };
+    nodes6[left] = nodes6[left] || { label: left, orbitedBy: [], currentDepth: 0 };
+    nodes6[left].orbitedBy.push(nodes6[right]);
 }
 
 
@@ -154,17 +154,17 @@ function visit(node, currentDepth) {
     node.orbitedBy.forEach(element => visit(element, currentDepth + 1));
 }
 
-visit(nodes["COM"], 0);
+visit(nodes6["COM"], 0);
 
-let sum = 0;
-for (const key in nodes) {
-    if (nodes.hasOwnProperty(key)) {
-        const element = nodes[key];
-        sum += element.currentDepth;
+let sum6 = 0;
+for (const key in nodes6) {
+    if (nodes6.hasOwnProperty(key)) {
+        const element = nodes6[key];
+        sum6 += element.currentDepth;
     }
 }
 
-console.log(sum);
+console.log(sum6);
 
 function findParentOf(nodes, label) {
     for (const key in nodes) {
@@ -177,27 +177,27 @@ function findParentOf(nodes, label) {
     }
 }
 
-let currentNodeOnTheWayBackFromYou = nodes["YOU"];
+let currentNodeOnTheWayBackFromYou6 = nodes6["YOU"];
 
-const nodesOnTheWayBackFromYou = [];
-while (currentNodeOnTheWayBackFromYou !== nodes["COM"]) {
-    const parent = findParentOf(nodes, currentNodeOnTheWayBackFromYou.label);
-    nodesOnTheWayBackFromYou.push(parent.label);
-    currentNodeOnTheWayBackFromYou = parent;
+const nodesOnTheWayBackFromYou6 = [];
+while (currentNodeOnTheWayBackFromYou6 !== nodes6["COM"]) {
+    const parent = findParentOf(nodes6, currentNodeOnTheWayBackFromYou6.label);
+    nodesOnTheWayBackFromYou6.push(parent.label);
+    currentNodeOnTheWayBackFromYou6 = parent;
 }
 
-let currentNodeOnTheWayBackFromSanta = nodes["SAN"];
+let currentNodeOnTheWayBackFromSanta6 = nodes6["SAN"];
 
-const nodesOnTheWayBackFromSanta = [];
-while (currentNodeOnTheWayBackFromSanta !== nodes["COM"]) {
-    const parent = findParentOf(nodes, currentNodeOnTheWayBackFromSanta.label);
-    nodesOnTheWayBackFromSanta.push(parent.label);
-    currentNodeOnTheWayBackFromSanta = parent;
+const nodesOnTheWayBackFromSanta6 = [];
+while (currentNodeOnTheWayBackFromSanta6 !== nodes6["COM"]) {
+    const parent = findParentOf(nodes6, currentNodeOnTheWayBackFromSanta6.label);
+    nodesOnTheWayBackFromSanta6.push(parent.label);
+    currentNodeOnTheWayBackFromSanta6 = parent;
 }
 
-for (let i = 0; i < nodesOnTheWayBackFromYou.length; i++) {
-    const element = nodesOnTheWayBackFromYou[i];
-    const indexOfInSantasList = nodesOnTheWayBackFromSanta.indexOf(element);
+for (let i = 0; i < nodesOnTheWayBackFromYou6.length; i++) {
+    const element = nodesOnTheWayBackFromYou6[i];
+    const indexOfInSantasList = nodesOnTheWayBackFromSanta6.indexOf(element);
     if (indexOfInSantasList !== -1) {
         console.log(i + indexOfInSantasList);
         break;

@@ -30,16 +30,16 @@
 
 // Your puzzle input is still 245318-765747.
 
-let validPasswordsA = 0;
-let validPasswordsB = 0;
+let validPasswordsA4 = 0;
+let validPasswordsB4 = 0;
 
-for (var current = 245318; current <= 765747; current++) {
-    const digit1 = Math.floor(current / 100000) % 10;
-    const digit2 = Math.floor(current / 10000) % 10;
-    const digit3 = Math.floor(current / 1000) % 10;
-    const digit4 = Math.floor(current / 100) % 10;
-    const digit5 = Math.floor(current / 10) % 10;
-    const digit6 = current % 10;
+for (var current4 = 245318; current4 <= 765747; current4++) {
+    const digit1 = Math.floor(current4 / 100000) % 10;
+    const digit2 = Math.floor(current4 / 10000) % 10;
+    const digit3 = Math.floor(current4 / 1000) % 10;
+    const digit4 = Math.floor(current4 / 100) % 10;
+    const digit5 = Math.floor(current4 / 10) % 10;
+    const digit6 = current4 % 10;
 
     // const digits = [digit1, digit2, digit3, digit4, digit5, digit6];
 
@@ -59,13 +59,13 @@ for (var current = 245318; current <= 765747; current++) {
     // const adjacentDigits = digits.reduce((previousValue, currentValue, currentIndex, arr) => previousValue + (currentIndex < 5 && currentValue === arr[currentIndex + 1] ? 1 : 0), 0);
 
     if (hasPairOrMore && digit1 <= digit2 && digit2 <= digit3 && digit3 <= digit4 && digit4 <= digit5 && digit5 <= digit6) {
-        validPasswordsA++;
+        validPasswordsA4++;
     }
 
     if (hasExactlyOnePair && digit1 <= digit2 && digit2 <= digit3 && digit3 <= digit4 && digit4 <= digit5 && digit5 <= digit6) {
-        validPasswordsB++;
+        validPasswordsB4++;
     }
 }
 
-console.log(validPasswordsA);
-console.log(validPasswordsB);
+console.log(validPasswordsA4);
+console.log(validPasswordsB4);

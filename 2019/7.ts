@@ -38,5 +38,153 @@
 // 1002,33,7,33,1,33,31,31,1,32,31,31,4,31,99,0,0,0
 // Try every combination of phase settings on the amplifiers. What is the highest signal that can be sent to the thrusters?
 
-const input7 = [3,8,1001,8,10,8,105,1,0,0,21,34,51,76,101,114,195,276,357,438,99999,3,9,1001,9,3,9,1002,9,3,9,4,9,99,3,9,101,4,9,9,102,4,9,9,1001,9,5,9,4,9,99,3,9,1002,9,4,9,101,3,9,9,102,5,9,9,1001,9,2,9,1002,9,2,9,4,9,99,3,9,1001,9,3,9,102,2,9,9,101,4,9,9,102,3,9,9,101,2,9,9,4,9,99,3,9,102,2,9,9,101,4,9,9,4,9,99,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,99,3,9,101,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,1,9,4,9,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,2,9,4,9,3,9,1001,9,2,9,4,9,99,3,9,1001,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,101,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,1,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,99,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1002,9,2,9,4,9,3,9,102,2,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,101,1,9,9,4,9,3,9,102,2,9,9,4,9,3,9,102,2,9,9,4,9,99,3,9,1002,9,2,9,4,9,3,9,101,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,101,2,9,9,4,9,3,9,101,1,9,9,4,9,3,9,1001,9,2,9,4,9,3,9,1002,9,2,9,4,9,3,9,1001,9,1,9,4,9,3,9,1001,9,2,9,4,9,3,9,1002,9,2,9,4,9,99];
+// Your puzzle answer was 38834.
 
+// The first half of this puzzle is complete! It provides one gold star: *
+
+// --- Part Two ---
+// It's no good - in this configuration, the amplifiers can't generate a large enough output signal to produce the thrust you'll need. The Elves quickly talk you through rewiring the amplifiers into a feedback loop:
+
+//       O-------O  O-------O  O-------O  O-------O  O-------O
+// 0 -+->| Amp A |->| Amp B |->| Amp C |->| Amp D |->| Amp E |-.
+//    |  O-------O  O-------O  O-------O  O-------O  O-------O |
+//    |                                                        |
+//    '--------------------------------------------------------+
+//                                                             |
+//                                                             v
+//                                                      (to thrusters)
+// Most of the amplifiers are connected as they were before; amplifier A's output is connected to amplifier B's input, and so on. However, the output from amplifier E is now connected into amplifier A's input. This creates the feedback loop: the signal will be sent through the amplifiers many times.
+
+// In feedback loop mode, the amplifiers need totally different phase settings: integers from 5 to 9, again each used exactly once. These settings will cause the Amplifier Controller Software to repeatedly take input and produce output many times before halting. Provide each amplifier its phase setting at its first input instruction; all further input/output instructions are for signals.
+
+// Don't restart the Amplifier Controller Software on any amplifier during this process. Each one should continue receiving and sending signals until it halts.
+
+// All signals sent or received in this process will be between pairs of amplifiers except the very first signal and the very last signal. To start the process, a 0 signal is sent to amplifier A's input exactly once.
+
+// Eventually, the software on the amplifiers will halt after they have processed the final loop. When this happens, the last output signal from amplifier E is sent to the thrusters. Your job is to find the largest output signal that can be sent to the thrusters using the new phase settings and feedback loop arrangement.
+
+// Here are some example programs:
+
+// Max thruster signal 139629729 (from phase setting sequence 9,8,7,6,5):
+
+// 3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,
+// 27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5
+// Max thruster signal 18216 (from phase setting sequence 9,7,8,5,6):
+
+// 3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,
+// -5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,
+// 53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10
+// Try every combination of the new phase settings on the amplifier feedback loop. What is the highest signal that can be sent to the thrusters?
+
+// Although it hasn't changed, you can still get your puzzle input.
+
+// Answer: 
+
+const input7 = [3, 8, 1001, 8, 10, 8, 105, 1, 0, 0, 21, 34, 51, 76, 101, 114, 195, 276, 357, 438, 99999, 3, 9, 1001, 9, 3, 9, 1002, 9, 3, 9, 4, 9, 99, 3, 9, 101, 4, 9, 9, 102, 4, 9, 9, 1001, 9, 5, 9, 4, 9, 99, 3, 9, 1002, 9, 4, 9, 101, 3, 9, 9, 102, 5, 9, 9, 1001, 9, 2, 9, 1002, 9, 2, 9, 4, 9, 99, 3, 9, 1001, 9, 3, 9, 102, 2, 9, 9, 101, 4, 9, 9, 102, 3, 9, 9, 101, 2, 9, 9, 4, 9, 99, 3, 9, 102, 2, 9, 9, 101, 4, 9, 9, 4, 9, 99, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 99, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 101, 1, 9, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 99, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 99, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 101, 1, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 99, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 101, 1, 9, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 101, 1, 9, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 99];
+
+//const input7 = [3, 23, 3, 24, 1002, 24, 10, 24, 1002, 23, -1, 23, 101, 5, 23, 23, 1, 24, 23, 23, 4, 23, 99, 0, 0];
+
+let nextInput = 0;
+let highestValue = 0;
+
+for (let j = 0; j < 10000 * 5 * 4 * 3 * 2 * 1; j++) {
+    nextInput = 0;
+
+    let phaseSequence = [0, 1, 2, 3, 4];
+    phaseSequence = phaseSequence.sort((a, b) => Math.random() - .5);
+
+    //console.log(phaseSequence);
+
+    for (let i = 0; i < phaseSequence.length; i++) {
+        const element = phaseSequence[i];
+        compute(input7.slice(), element);
+    }
+
+    if (nextInput > highestValue) {
+        console.log(`${phaseSequence} ${nextInput}`); // 1,3,0,4,2 38834
+
+        highestValue = nextInput;
+    }
+}
+
+function compute(newInput, phase) {
+    let index = 0;
+    let opcode = newInput[index];
+    let seenAnInput = false;
+
+    while (opcode !== 99) {
+        const current = newInput[index];
+
+        //0 == position mode
+        //1 == immediate mode
+        // thirdparametermode secondparametermode firstparametermode 2digitopcode
+        opcode = current % 100;
+        const firstParamImmediateMode = Math.floor(current / 100) % 10;
+        const secondParamImmediateMode = Math.floor(current / 1000) % 10;
+
+        const firstParam = firstParamImmediateMode ? newInput[index + 1] : newInput[newInput[index + 1]];
+        const secondParam = secondParamImmediateMode ? newInput[index + 2] : newInput[newInput[index + 2]];
+
+        // console.log(`opcode: ${opcode}`);
+        // console.log(`params: ${firstParam} ${secondParam}`);
+
+        if (opcode === 1) {
+            //Opcode 1 adds together numbers read from two positions and stores the result in a third position. The three integers immediately after the opcode tell you these three positions - the first two indicate the positions from which you should read the input values, and the third indicates the position at which the output should be stored.
+            newInput[newInput[index + 3]] = firstParam + secondParam;
+            index += 4;
+        } else if (opcode === 2) {
+            //Opcode 2 works exactly like opcode 1, except it multiplies the two inputs instead of adding them. Again, the three integers after the opcode indicate where the inputs and outputs are, not their values.
+            newInput[newInput[index + 3]] = firstParam * secondParam;
+            index += 4;
+        } else if (opcode === 3) {
+            //Opcode 3 takes a single integer as input and saves it to the position given by its only parameter. For example, the instruction 3,50 would take an input value and store it at address 50.
+            //first input is phase setting, second is nextInput
+            if (!seenAnInput) {
+                newInput[newInput[index + 1]] = phase;
+            } else {
+                newInput[newInput[index + 1]] = nextInput;
+            }
+            seenAnInput = true;
+            index += 2;
+        } else if (opcode === 4) {
+            //Opcode 4 outputs the value of its only parameter. For example, the instruction 4,50 would output the value at address 50.
+            nextInput = firstParam;
+            //console.log(nextInput);
+            index += 2;
+        } else if (opcode === 5) {
+            // Opcode 5 is jump-if-true: if the first parameter is non-zero, it sets the instruction pointer to the value from the second parameter. 
+            // Otherwise, it does nothing.
+            if (firstParam !== 0) {
+                index = secondParam;
+            } else {
+                index += 3;
+            }
+        } else if (opcode === 6) {
+            // Opcode 6 is jump-if-false: if the first parameter is zero, it sets the instruction pointer to the value from the second parameter. 
+            // Otherwise, it does nothing.
+            if (firstParam === 0) {
+                index = secondParam;
+            } else {
+                index += 3;
+            }
+        } else if (opcode === 7) {
+            // Opcode 7 is less than: if the first parameter is less than the second parameter, it stores 1 in the position given by the third parameter.
+            // Otherwise, it stores 0.
+            if (firstParam < secondParam) {
+                newInput[newInput[index + 3]] = 1;
+            } else {
+                newInput[newInput[index + 3]] = 0;
+            }
+            index += 4;
+        } else if (opcode === 8) {
+            // Opcode 8 is equals: if the first parameter is equal to the second parameter, it stores 1 in the position given by the third parameter. 
+            // Otherwise, it stores 0.
+            if (firstParam === secondParam) {
+                newInput[newInput[index + 3]] = 1;
+            } else {
+                newInput[newInput[index + 3]] = 0;
+            }
+            index += 4;
+        }
+    }
+}

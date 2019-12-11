@@ -3,13 +3,19 @@
 
 // "Attention, unmarked spacecraft! You are in violation of Space Law! All spacecraft must have a clearly visible registration identifier! You have 24 hours to comply or be sent to Space Jail!"
 
-// Not wanting to be sent to Space Jail, you radio back to the Elves on Earth for help. Although it takes almost three hours for their reply signal to reach you, they send instructions for how to power up the emergency hull painting robot and even provide a small Intcode program (your puzzle input) that will cause it to paint your ship appropriately.
+// Not wanting to be sent to Space Jail, you radio back to the Elves on Earth for help. 
+// Although it takes almost three hours for their reply signal to reach you, they send instructions for how to power up the emergency hull painting robot 
+// and even provide a small Intcode program (your puzzle input) that will cause it to paint your ship appropriately.
 
 // There's just one problem: you don't have an emergency hull painting robot.
 
-// You'll need to build a new emergency hull painting robot. The robot needs to be able to move around on the grid of square panels on the side of your ship, detect the color of its current panel, and paint its current panel black or white. (All of the panels are currently black.)
+// You'll need to build a new emergency hull painting robot. 
+// The robot needs to be able to move around on the grid of square panels on the side of your ship, detect the color of its current panel, 
+// and paint its current panel black or white. (All of the panels are currently black.)
 
-// The Intcode program will serve as the brain of the robot. The program uses input instructions to access the robot's camera: provide 0 if the robot is over a black panel or 1 if the robot is over a white panel. Then, the program will output two values:
+// The Intcode program will serve as the brain of the robot. 
+// The program uses input instructions to access the robot's camera: provide 0 if the robot is over a black panel or 1 if the robot is over a white panel.
+// Then, the program will output two values:
 
 // First, it will output a value indicating the color to paint the panel the robot is over: 0 means to paint the panel black, and 1 means to paint the panel white.
 // Second, it will output a value indicating the direction the robot should turn: 0 means it should turn left 90 degrees, and 1 means it should turn right 90 degrees.

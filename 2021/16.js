@@ -32,7 +32,7 @@ var operations = [];
 
 parsePacket(0);
 
-//console.log(`version sum: ${seenVersions.reduce((prev, curr) => curr + prev)}`);
+console.log(`version sum: ${seenVersions.reduce((prev, curr) => curr + prev)}`);
 
 function parsePacket(currentIndex) {
   if (currentIndex > binary.length) {
@@ -147,50 +147,10 @@ function parsePacket(currentIndex) {
   }
 }
 
-console.log(operations);
-
-// var firstOp = operations.splice(0,1)[0];
-// var answer = getOperands(firstOp, operations);
-// console.log(answer);
-
-// function getOperationResult(operation, on) {
-//   switch (operation) {
-//     case "sum":
-//       console.log(`sum: ${on}`);
-//       return {result: on.reduce((p, c) => p + c), rest: []};
-//     case "product":
-//       console.log(`product: ${on}`);
-//       return {result: on.reduce((p, c) => p * c), rest: []};
-//     case "minimum":
-//       console.log(`min: ${on}`);
-//       return {result: on.sort((a, b) => a - b)[0], rest: []};
-//     case "maximum":
-//       console.log(`max: ${on}`);
-//       return {result: on.sort((a, b) => b - a)[0], rest: []};
-//     case "greaterthan":
-//       console.log(`gt: ${on}`);
-//       return {result: on[0] > on[1] ? 1 : 0, rest: on.slice(2)};
-//     case "lessthan":
-//       console.log(`lt: ${on}`);
-//       return {result: on[0] < on[1] ? 1 : 0, rest: on.slice(2)};
-//     case "equalto":
-//       console.log(`eq: ${on}`);
-//       return {result: on[0] == on[1] ? 1 : 0, rest: on.slice(2)};
-//     default:
-//       console.log("invalid op");
-//       break;
-//   }
-// }
-
 var answer = getValue(operations);
 console.log(answer);
 
 function getValue(theStack) {
-  console.log(theStack);
-  // if (theStack.length == 1) {
-  //   return { result: theStack[0], count: 1 };
-  // }
-
   var currentOp = theStack.splice(0, 1)[0];
 
   if (!isNaN(Number(currentOp))) {
@@ -277,63 +237,3 @@ function getValue(theStack) {
     }
   }
 }
-// //we have at least 1 op in here we need to deal with
-// var currentOperands = [];
-// var stack = restOfStack;
-// while (stack.length > 0) {
-//   var currentVal = stack.splice(0,1)[0];
-//   if (!isNaN(Number(currentVal))) {
-//     currentOperands.push(currentVal);
-//   } else {
-//     var r = getOperands(currentVal, stack);
-//     stack = r.leftOvers;
-//     currentOperands.push(r.result);
-//   }
-// }
-
-//   return { result: getOperationResult(operation, restOfStack), leftOvers: [] };
-// }
-
-//374 too low
-
-// var ans = doOperation(operations);
-// console.log(ans);
-
-// function doOperation(opStack) {
-//   console.log(`current stack: ${opStack}`);
-
-//   //process everything until we get to just numbers?
-//   var firstOp = opStack.slice(0, 1)[0];
-//   console.log(`firstOp: ${firstOp}`);
-//   //it's an operation
-//   var theRest = doOperation(opStack.slice(1));
-
-//   //do the operation on the result
-//   switch (firstOp) {
-//     case "sum":
-//       console.log(`sum: ${theRest}`);
-//       return theRest.reduce((p, c) => p + c);
-//     case "product":
-//       var ret = theRest.reduce((p, c) => p * c);
-//       console.log(`product: ${theRest} : ${ret}`);
-//       return ret;
-//     case "minimum":
-//       console.log(`min: ${theRest}`);
-//       return theRest.sort((a, b) => a - b)[0];
-//     case "maximum":
-//       console.log(`max: ${theRest}`);
-//       return theRest.sort((a, b) => b - a)[0];
-//     case "greaterthan":
-//       console.log(`gt: ${theRest}`);
-//       return theRest[0] > theRest[1] ? 1 : 0;
-//     case "lessthan":
-//       console.log(`lt: ${theRest}`);
-//       return theRest[0] < theRest[1] ? 1 : 0;
-//     case "equalto":
-//       console.log(`eq: ${theRest}`);
-//       return theRest[0] == theRest[1] ? 1 : 0;
-//     default:
-//       console.log("invalid op");
-//       break;
-//   }
-// }

@@ -1,4 +1,4 @@
-//AOC16a
+//AOC17
 var practice = `target area: x=20..30, y=-10..-5`;
 
 var real = 'target area: x=217..240, y=-126..-69';

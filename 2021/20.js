@@ -116,9 +116,10 @@ var input =
     ? real//practice
     : document.body.innerText.trim();
 
-var decoder = input.split('\n')[0].split('').map(x => x == '#');
+var decoder = input.split('\n')[0].split('').map(x => x != '#');
+decoder.reverse();
 
-var inputImage = input.split('\n\n')[1].split('\n').map(x => x.split('').map(y => y == '#'));
+var inputImage = input.split('\n\n')[1].split('\n').map(x => x.split('').map(y => y != '#'));
 
 console.log(inputImage[3][1]);
 
@@ -129,7 +130,7 @@ console.log(inputImage[3][1]);
 var outputImage = inputImage;
 // console.log(outputImage);
 
-var numberOfIterations = 01;
+var numberOfIterations = 02;
 
 for (var i = 0; i < numberOfIterations; i++) {
   outputImage = [];
@@ -191,7 +192,7 @@ var numberOfTrues = 0;
  Object.keys(outputImage).forEach(yKey => {
    Object.keys(outputImage[yKey]).forEach(xKey => {
      var t = (outputImage[yKey][xKey] != undefined) && outputImage[yKey][xKey];
-     numberOfTrues += t ? 1 : 0;
+     numberOfTrues += t ? 0 : 1;
      str += t ? '█' : '▯';
      //console.log(`${xKey},${yKey} ${outputImage[yKey][xKey]}`);
    });
@@ -202,4 +203,7 @@ var numberOfTrues = 0;
 //  var numberOfTrues = outputImage.flatMap(x => x.map(y => y)).filter(x => x).length;
  console.log(numberOfTrues);
 
+ //5584 too low
  //5905 too high
+ //5193 too low
+ //5832 fuck this

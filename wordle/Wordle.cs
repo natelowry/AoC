@@ -12,17 +12,27 @@ var allWords = File.ReadAllLines("./wordle_word_list.txt");
 Derp.All5LetterWords = allWords.Where(w => w.Length == 5).Select(w => w.ToUpper());
 Derp.Ranked5LetterWords = Derp.All5LetterWords.Select(w => new WordWithRanking { Word = w, Ranking = GetGreenScoreFor(w) }).OrderByDescending(x => x.Ranking);
 
-Console.WriteLine($"Best guess: {Derp.Ranked5LetterWords.First().Word}");
+// Console.WriteLine($"Best guess: {Derp.Ranked5LetterWords.First().Word}");
 
+//SLATE 🟩⬜⬜⬜🟨
+//SURER 🟩⬜⬜🟩🟩  💥
+//SOWER?
 var currentConstraints = new Constraints
 {
-    ExcludedLetters = new[] { 'L' },
-    IncludedLetters = new[] {
-        new LetterWithIndex('O', 3),
+    ExcludedLetters = new char[] { 
+        'L', 
+        'A', 
+        'T', 
+        'U', 
+        'R', 
+        'B' },
+    IncludedLetters = new LetterWithIndex[] {
     },
     KnownLetters = new LetterWithIndex[] {
-        new LetterWithIndex('A', 0),
-        new LetterWithIndex('L', 1),
+        new LetterWithIndex('S', 0),
+        new LetterWithIndex('O', 1),
+        new LetterWithIndex('E', 3),
+        new LetterWithIndex('R', 4),
     },
 };
 var nextBest = GetBestRemainingWord(currentConstraints);
@@ -63,7 +73,7 @@ static string GetBestRemainingWord(Constraints currentConstraints)
             remainingWords = remainingWords.Where(w => w.Word[knownLetter.Index] == knownLetter.Letter);
         }
     }
-    Console.WriteLine($"Done exacting: {string.Join(",", remainingWords.Take(25).Select(w => w.Word))}");
+    // Console.WriteLine($"Done exacting: {string.Join(",", remainingWords.Take(25).Select(w => w.Word))}");
 
     if (currentConstraints.ExcludedLetters.Any())
     {
@@ -72,7 +82,7 @@ static string GetBestRemainingWord(Constraints currentConstraints)
             var matchingKnownLetter = currentConstraints.KnownLetters.FirstOrDefault(kl => kl.Letter == excludedLetter);
             if (matchingKnownLetter != null)
             {
-                Console.WriteLine($"Matching known letter with excluded letter: {matchingKnownLetter.Letter}");
+                Console.WriteLine($"Matching known letter with excluded letter: {matchingKnownLetter.Letter} at {matchingKnownLetter.Index}");
                 //if word is ALOFT and we guess ALLOY, we'll get a ⬜ on index 2, even though it does contain an L
                 remainingWords = remainingWords.Where(w =>
                     //for every letter in this word
@@ -87,11 +97,11 @@ static string GetBestRemainingWord(Constraints currentConstraints)
             }
             else
             {
-                remainingWords = remainingWords.Where(w => !w.Word.Any(l => currentConstraints.ExcludedLetters.Contains(l)));
+                remainingWords = remainingWords.Where(w => !w.Word.Contains(excludedLetter));
             }
         }
     }
-    Console.WriteLine($"Done excluding: {string.Join(",", remainingWords.Take(25).Select(w => w.Word))}");
+    // Console.WriteLine($"Done excluding: {string.Join(",", remainingWords.Take(25).Select(w => w.Word))}");
 
     if (currentConstraints.IncludedLetters.Any())
     {
@@ -100,7 +110,7 @@ static string GetBestRemainingWord(Constraints currentConstraints)
             remainingWords = remainingWords.Where(w => w.Word.Contains(includedLetter.Letter) && w.Word[includedLetter.Index] != includedLetter.Letter);
         }
     }
-    Console.WriteLine($"Done including: {string.Join(",", remainingWords.Take(25).Select(w => w.Word))}");
+    // Console.WriteLine($"Done including: {string.Join(",", remainingWords.Take(25).Select(w => w.Word))}");
 
     return remainingWords.OrderByDescending(w => w.Ranking).FirstOrDefault().Word;
 }

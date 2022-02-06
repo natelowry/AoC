@@ -19,20 +19,14 @@ Derp.Ranked5LetterWords = Derp.All5LetterWords.Select(w => new WordWithRanking {
 //SOWER?
 var currentConstraints = new Constraints
 {
-    ExcludedLetters = new char[] { 
-        'L', 
-        'A', 
-        'T', 
-        'U', 
-        'R', 
-        'B' },
+    ExcludedLetters = new char[] {
+        'S',
+        },
     IncludedLetters = new LetterWithIndex[] {
+        new LetterWithIndex('F', 0),
     },
     KnownLetters = new LetterWithIndex[] {
-        new LetterWithIndex('S', 0),
-        new LetterWithIndex('O', 1),
-        new LetterWithIndex('E', 3),
-        new LetterWithIndex('R', 4),
+        new LetterWithIndex('L', 1),
     },
 };
 var nextBest = GetBestRemainingWord(currentConstraints);
@@ -80,6 +74,7 @@ static string GetBestRemainingWord(Constraints currentConstraints)
         foreach (var excludedLetter in currentConstraints.ExcludedLetters)
         {
             var matchingKnownLetter = currentConstraints.KnownLetters.FirstOrDefault(kl => kl.Letter == excludedLetter);
+            var matchingIncludedLetter = currentConstraints.IncludedLetters.FirstOrDefault(kl => kl.Letter == excludedLetter);
             if (matchingKnownLetter != null)
             {
                 Console.WriteLine($"Matching known letter with excluded letter: {matchingKnownLetter.Letter} at {matchingKnownLetter.Index}");
@@ -94,6 +89,13 @@ static string GetBestRemainingWord(Constraints currentConstraints)
                         i == matchingKnownLetter.Index
                     ).All(x => x)
                 );
+            }
+            else if (matchingIncludedLetter != null)
+            {
+                Console.WriteLine($"Matching included letter with excluded letter: {matchingIncludedLetter.Letter} at {matchingIncludedLetter.Index}");
+                //NOOP here
+                //SKILL ⬜⬜⬜🟨⬜ (word was ALOFT)
+                //TODO: could take the latter of these and exclude any after that? (need to check how the rules work)
             }
             else
             {

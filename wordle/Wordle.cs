@@ -14,104 +14,19 @@ Derp.Ranked5LetterWords = Derp.All5LetterWords.Select(w => new WordWithRanking {
 
 Console.WriteLine($"Best guess: {Derp.Ranked5LetterWords.First().Word}");
 
-
-//nate
-// var currentConstraints = new Constraints
-// {
-//     ExcludedLetters = new[] { 'S', 'H' },
-//     IncludedLetters = new[] {
-//         new LetterWithIndex('A', 2),
-//     },
-//     KnownLetters = new[] {
-//         new LetterWithIndex('F', 3),
-//         new LetterWithIndex('T', 4),
-//     },
-// };
-
-//carrie
-// var currentConstraints = new Constraints
-// {
-//     IncludedLetters = new[] {
-//         new LetterWithIndex('F', 0),
-//         new LetterWithIndex('A', 3),
-//     },
-//     KnownLetters = new[] {
-//         new LetterWithIndex('L',1),
-//         new LetterWithIndex('O',2),
-//         new LetterWithIndex('T',4),
-//     }
-// };
-
 var currentConstraints = new Constraints
 {
-    ExcludedLetters = new[] { 'L', 'T', 'E' },
+    ExcludedLetters = new[] { 'L' },
     IncludedLetters = new[] {
-        new LetterWithIndex('S', 0),
+        new LetterWithIndex('O', 3),
     },
-    KnownLetters = new[] {
-        new LetterWithIndex('A', 2),
-    }
+    KnownLetters = new LetterWithIndex[] {
+        new LetterWithIndex('A', 0),
+        new LetterWithIndex('L', 1),
+    },
 };
-
 var nextBest = GetBestRemainingWord(currentConstraints);
 Console.WriteLine(nextBest);
-
-//sanes
-// var currentConstraints = new Constraints
-// {
-//     ExcludedLetters = new[] { 'S', 'N', 'E' },
-//     IncludedLetters = new[] {
-//         new LetterWithIndex('A', 1),
-//     },
-// };
-
-// var nextBest = GetBestRemainingWord(currentConstraints);
-// Console.WriteLine(nextBest);
-
-// currentConstraints = new Constraints
-// {
-//     ExcludedLetters = new[] { 'S', 'N', 'E', 'M', 'R', 'Y' },
-//     IncludedLetters = new[] {
-//         new LetterWithIndex('A', 1),
-//         new LetterWithIndex('A', 3),
-//         new LetterWithIndex('O', 1),
-//     },
-// };
-// nextBest = GetBestRemainingWord(currentConstraints);
-// Console.WriteLine(nextBest);
-
-// currentConstraints = new Constraints 
-// {
-//     ExcludedLetters = new[] { 'S', 'N', 'E', 'M', 'R', 'Y', 'B', 'I' },
-//     IncludedLetters = new[] {
-//         new LetterWithIndex('A', 1),
-//         new LetterWithIndex('A', 3),
-//         new LetterWithIndex('A', 4),
-//         new LetterWithIndex('O', 1),
-//         new LetterWithIndex('T', 3),
-//     },
-//     KnownLetters = new[] {
-//         new LetterWithIndex('O', 2),
-//     }
-// };
-// nextBest = GetBestRemainingWord(currentConstraints);
-// Console.WriteLine(nextBest);
-
-// //TODO: handle a grey L when there's 2 L's and one is in the right spot and the other is not
-// //ALOFT => guessed ALLOY and got 🟩🟩⬜🟨⬜
-// currentConstraints = new Constraints 
-// {
-//     ExcludedLetters = new[] { 'S', 'N', 'E', 'B', 'R', 'D', 'Y' },
-//     IncludedLetters = new[] {
-//         new LetterWithIndex('A', 1),
-//         new LetterWithIndex('A', 2),
-//         new LetterWithIndex('O', 1),
-//         new LetterWithIndex('O', 3),
-//     },
-// };
-// nextBest = GetBestRemainingWord(currentConstraints);
-// Console.WriteLine(nextBest);
-
 
 // GetLetterFrequencies();
 
@@ -137,7 +52,6 @@ static void GetLetterFrequencies()
     //arose best for yellows
 }
 
-
 static string GetBestRemainingWord(Constraints currentConstraints)
 {
     //todo try toarray on all of em
@@ -153,7 +67,29 @@ static string GetBestRemainingWord(Constraints currentConstraints)
 
     if (currentConstraints.ExcludedLetters.Any())
     {
-        remainingWords = remainingWords.Where(w => !w.Word.Any(l => currentConstraints.ExcludedLetters.Contains(l)));
+        foreach (var excludedLetter in currentConstraints.ExcludedLetters)
+        {
+            var matchingKnownLetter = currentConstraints.KnownLetters.FirstOrDefault(kl => kl.Letter == excludedLetter);
+            if (matchingKnownLetter != null)
+            {
+                Console.WriteLine($"Matching known letter with excluded letter: {matchingKnownLetter.Letter}");
+                //if word is ALOFT and we guess ALLOY, we'll get a ⬜ on index 2, even though it does contain an L
+                remainingWords = remainingWords.Where(w =>
+                    //for every letter in this word
+                    w.Word.Select((l, i) =>
+                        //either it IS NOT the excluded letter
+                        l != excludedLetter
+                        //OR it IS the the excluded letter, but the index matches the known letter
+                        ||
+                        i == matchingKnownLetter.Index
+                    ).All(x => x)
+                );
+            }
+            else
+            {
+                remainingWords = remainingWords.Where(w => !w.Word.Any(l => currentConstraints.ExcludedLetters.Contains(l)));
+            }
+        }
     }
     Console.WriteLine($"Done excluding: {string.Join(",", remainingWords.Take(25).Select(w => w.Word))}");
 

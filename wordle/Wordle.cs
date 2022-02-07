@@ -10,9 +10,6 @@ using System.Collections.Generic;
 var allWords = File.ReadAllLines("./wordle_word_list.txt");
 
 Derp.All5LetterWords = allWords.Where(w => w.Length == 5).Select(w => w.ToUpper());
-Derp.Ranked5LetterWords = Derp.All5LetterWords.Select(w => new WordWithRanking { Word = w, Ranking = GetGreenScoreFor(w) }).OrderByDescending(x => x.Ranking);
-
-// Console.WriteLine($"Best guess: {Derp.Ranked5LetterWords.First().Word}");
 
 //SLATE 🟩⬜⬜⬜🟨
 //SURER 🟩⬜⬜🟩🟩  💥
@@ -33,11 +30,10 @@ var nextBest = GetBestRemainingWord(currentConstraints);
 Console.WriteLine(nextBest);
 
 // GetLetterFrequencies();
-
-static int GetGreenScoreFor(string word)
+static int GetGreenScoreFor(string word, IEnumerable<string> remainingWords)
 {
     var countsOfGreens = 0;
-    foreach (var wordToCheck in Derp.All5LetterWords)
+    foreach (var wordToCheck in remainingWords)
     {
         for (int i = 0; i < 5; i++)
         {
@@ -58,13 +54,12 @@ static void GetLetterFrequencies()
 
 static string GetBestRemainingWord(Constraints currentConstraints)
 {
-    //todo try toarray on all of em
-    var remainingWords = Derp.Ranked5LetterWords;
+    var remainingWords = Derp.All5LetterWords;
     if (currentConstraints.KnownLetters.Any())
     {
         foreach (var knownLetter in currentConstraints.KnownLetters)
         {
-            remainingWords = remainingWords.Where(w => w.Word[knownLetter.Index] == knownLetter.Letter);
+            remainingWords = remainingWords.Where(w => w[knownLetter.Index] == knownLetter.Letter);
         }
     }
     // Console.WriteLine($"Done exacting: {string.Join(",", remainingWords.Take(25).Select(w => w.Word))}");
@@ -81,7 +76,7 @@ static string GetBestRemainingWord(Constraints currentConstraints)
                 //if word is ALOFT and we guess ALLOY, we'll get a ⬜ on index 2, even though it does contain an L
                 remainingWords = remainingWords.Where(w =>
                     //for every letter in this word
-                    w.Word.Select((l, i) =>
+                    w.Select((l, i) =>
                         //either it IS NOT the excluded letter
                         l != excludedLetter
                         //OR it IS the the excluded letter, but the index matches the known letter
@@ -99,7 +94,7 @@ static string GetBestRemainingWord(Constraints currentConstraints)
             }
             else
             {
-                remainingWords = remainingWords.Where(w => !w.Word.Contains(excludedLetter));
+                remainingWords = remainingWords.Where(w => !w.Contains(excludedLetter));
             }
         }
     }
@@ -109,12 +104,12 @@ static string GetBestRemainingWord(Constraints currentConstraints)
     {
         foreach (var includedLetter in currentConstraints.IncludedLetters)
         {
-            remainingWords = remainingWords.Where(w => w.Word.Contains(includedLetter.Letter) && w.Word[includedLetter.Index] != includedLetter.Letter);
+            remainingWords = remainingWords.Where(w => w.Contains(includedLetter.Letter) && w[includedLetter.Index] != includedLetter.Letter);
         }
     }
     // Console.WriteLine($"Done including: {string.Join(",", remainingWords.Take(25).Select(w => w.Word))}");
 
-    return remainingWords.OrderByDescending(w => w.Ranking).FirstOrDefault().Word;
+    return remainingWords.OrderByDescending(w => GetGreenScoreFor(w, remainingWords)).FirstOrDefault();
 }
 
 public class LetterWithIndex
@@ -145,5 +140,4 @@ public class Constraints
 public static class Derp
 {
     public static IEnumerable<string> All5LetterWords = new string[] { };
-    public static IEnumerable<WordWithRanking> Ranked5LetterWords = new WordWithRanking[] { };
 }

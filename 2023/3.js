@@ -140,7 +140,8 @@ var input = `............409..........784...578...802......64...................
 ....................86...337...............710....................143.....................179.....976.......................419.........468.`;
 
 if (false) {
-  input = `467..114..
+  input = 
+`467..114..
 ...*......
 ..35..633.
 ......#...
@@ -155,6 +156,7 @@ if (false) {
 var arr = input.split("\n").map((x) => [...x]);
 
 var touchesASymbol = arr.map((y) => y.map((x) => 0));
+var partOfPartNumber = arr.map((y) => y.map((x) => 0));
 
 for (let y = 0; y < arr.length; y++) {
   const row = arr[y];
@@ -177,6 +179,8 @@ for (let y = 0; y < arr.length; y++) {
 }
 
 //console.log(touchesASymbol[0].reduce((prev, curr) => `${prev}${curr}`));
+var currentPartNumberId = 1;
+var numberIdHash = {};
 
 var validNumbers = [];
 for (let y = 0; y < arr.length; y++) {
@@ -199,6 +203,11 @@ for (let y = 0; y < arr.length; y++) {
         var combinedNumber = parseInt(currentNumber.reduce((prev, curr) => `${prev.toString()}${curr.toString()}`));
        // console.log(`valid ${combinedNumber}`);
         validNumbers.push(combinedNumber);
+        for (let z = x - currentNumber.length; z < x; z++) {
+          partOfPartNumber[y][z] = currentPartNumberId;
+        }
+        numberIdHash[currentPartNumberId] = combinedNumber;
+        currentPartNumberId++;
       }
       currentNumber = [];
       weHitASymbol = false;
@@ -210,6 +219,11 @@ for (let y = 0; y < arr.length; y++) {
     var combinedNumber = parseInt(currentNumber.reduce((prev, curr) => `${prev.toString()}${curr.toString()}`));
    // console.log(`valid2 ${combinedNumber}`);
     validNumbers.push(combinedNumber);
+    for (let z = row.length - currentNumber.length; z < row.length; z++) {
+      partOfPartNumber[y][z] = currentPartNumberId;
+    }
+    numberIdHash[currentPartNumberId] = combinedNumber;
+    currentPartNumberId++;
   }
 
   //single line debugging
@@ -217,9 +231,55 @@ for (let y = 0; y < arr.length; y++) {
 }
 
 //console.log(validNumbers);
+//console.log(partOfPartNumber);
 
-console.log(`Answer: ${validNumbers.reduce((prev, curr) => prev + curr)}`);
+console.log(`Answer a: ${validNumbers.reduce((prev, curr) => prev + curr)}`);
 
+var nextToPartNumbers = arr.map((asdf) => asdf.map(fdsa => new Object()));
+//check for exactly 2 part numbers
+for (let y = 0; y < arr.length; y++) {
+  const row = arr[y];
+  for (let x = 0; x < row.length; x++) {
+    const char = row[x];
+    //console.log(`char: ${char} x:${x} y:${y}`);
+    //console.log(`bounds: ${Math.max(0, x - 1)}->${Math.min(row.length, x + 1)} ${Math.max(0, y - 1)}->${Math.min(arr.length, y + 1)}`);
+    for (let xx = Math.max(0, x - 1); xx <= Math.min(row.length - 1, x + 1); xx++) {
+      for (let yy = Math.max(0, y - 1); yy <= Math.min(arr.length - 1, y + 1); yy++) {
+        let partNumber = partOfPartNumber[yy][xx];
+        if (!Number.isNaN(parseInt(arr[y][x])) || arr[y][x] == '.') {
+          //don't do numbers or dots
+          continue;
+        } 
+        //console.log(`checking ${xx},${yy} ${check}`);
+        if (partNumber != 0) {
+          if (!(partNumber.toString() in nextToPartNumbers[y][x])) {
+            //nextToPartNumbers[y][x] = {};
+            nextToPartNumbers[y][x][partNumber.toString()] = numberIdHash[partNumber];
+          }
+        }
+      }
+    }
+  }
+  //single line debugging \/
+  //break;
+}
+
+//console.log(numberIdHash);
+//console.log(nextToPartNumbers);
+
+var ratios = [];
+for (let y = 0; y < arr.length; y++) {
+  for (let x = 0; x < arr[0].length; x++) {
+    const current = nextToPartNumbers[y][x];
+
+    if (Object.keys(current).length == 2) {
+      //console.log(current);
+      ratios.push(Object.keys(current).map(i => current[i]).reduce((prev, curr) => prev * curr));
+    }
+  }
+}
+
+console.log(`Answer b: ${ratios.reduce((prev, curr) => prev + curr)}`);
 // 467..114..
 // ...*......
 // ..35..633.

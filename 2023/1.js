@@ -1023,4 +1023,70 @@ for (var i = 0; i < lines.length; i++) {
 
 //console.log(results);
 
-console.log(results.reduce((prev, curr) => prev + curr));
+console.log(`Answer: ${results.reduce((prev, curr) => prev + curr)}`);
+
+// part 2
+
+// input = `two1nine
+// eightwothree
+// abcone2threexyz
+// xtwone3four
+// 4nineeightseven2
+// zoneight234
+// 7pqrstsixteen`;
+
+var lines = input.split("\n");
+
+var results = [];
+
+var numbers = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+
+for (var i = 0; i < lines.length; i++) {
+  var currentLine = lines[i];
+  var firstDigit = NaN;
+  var lastDigit = NaN;
+
+  for (var j = 0; j < currentLine.length; j++) {
+    var num = parseInt(currentLine[j]);
+    if (num) {
+      firstDigit = num;
+      //console.log(`found a ${firstDigit}`);
+      break;
+    } 
+    for (var k = 0; k < numbers.length; k++) {
+        if (currentLine.substring(j).indexOf(numbers[k]) == 0) {
+            firstDigit = k+1;
+            //console.log(`found a ${firstDigit}`);
+            break;
+        }
+    }
+    if (firstDigit > 0) {
+        break;
+    }
+  }
+
+  for (var j = currentLine.length - 1; j >= 0; j--) {
+    var num = parseInt(currentLine[j]);
+    if (num) {
+      lastDigit = num;
+      //console.log(`found a numeric ${lastDigit}`);
+      break;
+    } 
+    for (var k = 0; k < numbers.length; k++) {
+        if (currentLine.substring(j).indexOf(numbers[k]) == 0) {
+            lastDigit = k+1;
+            //console.log(`found a ${lastDigit} at ${j}`);
+            break;
+        }
+    }
+    if (lastDigit > 0) {
+        break;
+    }
+  }
+  //console.log(`${firstDigit} ${lastDigit}`);
+  results.push(firstDigit * 10 + lastDigit);
+}
+
+//console.log(results);
+
+console.log(`Answer: ${results.reduce((prev, curr) => prev + curr)}`);

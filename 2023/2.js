@@ -100,12 +100,14 @@ Game 98: 9 red, 14 blue; 19 red, 4 blue; 11 red, 17 blue; 14 blue, 1 green, 18 r
 Game 99: 1 green, 1 red, 12 blue; 2 green, 4 red, 14 blue; 4 blue, 6 red; 10 red, 2 green, 1 blue
 Game 100: 5 red, 9 green, 2 blue; 9 blue, 6 green, 1 red; 8 blue, 7 green, 3 red`;
 
-// input = `Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
-// Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
-// Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
-// Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
-// Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green`;
-
+if (false) {
+    input = `Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
+    Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue
+    Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red
+    Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red
+    Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green`;
+}
+    
 var gameLines = input.split("\n");
 
 var validGames = [];
@@ -140,3 +142,33 @@ for (let i = 0; i < gameLines.length; i++) {
 
 console.log(`Answer: ${validGames.reduce((prev, curr) => prev + curr)}`);
 
+var powers = [];
+for (let i = 0; i < gameLines.length; i++) {
+    const gameLine = gameLines[i].split(":")[1];
+  
+    const pulls = gameLine.split(";");
+
+    var minRed = 0; minGreen = 0; minBlue = 0;
+  
+    for (let j = 0; j < pulls.length; j++) {
+        const pull = pulls[j];
+        
+        let colors = pull.split(",").map((x) => x.trim().split(" ").reverse());
+        //console.log(colors);
+
+        let red = parseInt((colors.filter((c) => c[0] == "red")[0] || ["red", "0"])[1]);
+        let green = parseInt((colors.filter((c) => c[0] == "green")[0] || ["green", "0"])[1]);
+        let blue = parseInt((colors.filter((c) => c[0] == "blue")[0] || ["blue", "0"])[1]);
+
+        minRed = Math.max(minRed, red);
+        minGreen = Math.max(minGreen, green);
+        minBlue = Math.max(minBlue, blue);
+    }
+
+    // console.log(`red: ${minRed} green: ${minGreen} blue: ${minBlue}`);      
+    powers.push(minRed * minGreen * minBlue);
+  }
+
+console.log(`Answer: ${powers.reduce((prev, curr) => prev + curr)}`);
+
+  

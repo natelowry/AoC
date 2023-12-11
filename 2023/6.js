@@ -37,6 +37,9 @@ if (false) {
   ];
 }
 
+//use this for b \/\/
+//races = [{ time: 44826981, distance: 202107611381458 }];
+
 var winners = [];
 
 for (let currentRaceNumber = 0; currentRaceNumber < races.length; currentRaceNumber++) {

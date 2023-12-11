@@ -202,7 +202,8 @@ if (false) {
 }
 
 var cards = input.split("\n");
-var points = Array(cards.length).map((x) => 0);
+var points = Array(cards.length).map(x => 0);
+var numberOfWinners = Array(cards.length).map(x => 0);
 
 for (let i = 0; i < cards.length; i++) {
   const card = cards[i].split(":")[1];
@@ -214,13 +215,31 @@ for (let i = 0; i < cards.length; i++) {
 
 //   if (i > 10) { break; }
 
-  let numberOfWinners = ourNumbers
+  numberOfWinners[i] = ourNumbers
     .map((ourNumber) => (winningNumbers.indexOf(ourNumber) >= 0 ? 1 : 0))
     .reduce((prev, curr) => prev + curr);
 
-  if (numberOfWinners > 0) {
-    points[i] = 1 << (numberOfWinners - 1);
+  if (numberOfWinners[i] > 0) {
+    points[i] = 1 << (numberOfWinners[i] - 1);
   }  
 }
 
+var numberOfScratchcards = cards.map(x => 1);
+//console.log(numberOfWinners);
+//console.log(numberOfScratchcards);
+for (let i = 0; i < cards.length; i++) {
+  var numberOfWinnersForThisCard = numberOfWinners[i];
+  for (let j = 0; j < numberOfWinnersForThisCard; j++) {
+    let index = i + j + 1;
+    if (index >= cards.length){
+      continue;
+    }
+    //console.log(`index: ${index} number: ${numberOfScratchcards[i]}`);
+    numberOfScratchcards[index] += numberOfScratchcards[i];
+  }
+}
+
 console.log(`answer a: ${points.reduce((prev, curr) => prev + curr)}`);
+console.log(`answer b: ${numberOfScratchcards.reduce((prev, curr) => prev + curr)}`);
+
+//console.log(numberOfScratchcards);

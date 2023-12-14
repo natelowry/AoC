@@ -216,6 +216,7 @@ function allZeros(sequence) {
 }
 
 var toSum = [];
+var backwardsSum = []
 for (let h = 0; h < histories.length; h++) {
   let currentHistory = histories[h].split(" ").map((x) => parseInt(x));
   let lines = [currentHistory];
@@ -226,7 +227,6 @@ for (let h = 0; h < histories.length; h++) {
     currentLine++;
   }
 
-//   var extrapolatedValues = [];
   for (let i = lines.length - 1; i >= 0; i--) {
     let lastNumberInThisLine = lines[i][lines[i].length - 1];
     let lineBelow = lines[i + 1] || [];
@@ -240,6 +240,19 @@ for (let h = 0; h < histories.length; h++) {
   toSum.push(lines[0][lines[0].length - 1]);
    //console.log(lines);
 
+   for (let i = lines.length - 1; i >= 0; i--) {
+    let firstNumberInThisLine = lines[i][0];
+    let lineBelow = lines[i + 1] || [];
+    let firstNumberOfLineBelow = lineBelow[0] || 0;
+    lines[i].splice(0, 0, firstNumberInThisLine - firstNumberOfLineBelow)
+    // let toAdd = lines[i - 1] ? lines[i - 1].reverse()[0] : 0;
+    // let endNumber = extrapolatedValues[i - 1] || 0;//lines[i].reverse()[0];
+    // extrapolatedValues.push(endNumber + toAdd);
+  }
+
+  backwardsSum.push(lines[0][0]);
+
 }
 
  console.log(`answer a: ${toSum.reduce((prev, curr) => prev + curr)}`);
+ console.log(`answer b: ${backwardsSum.reduce((prev, curr) => prev + curr)}`);

@@ -783,6 +783,52 @@ BBB = (AAA, ZZZ)
 ZZZ = (ZZZ, ZZZ)`;
 }
 
+if ("a" == "yep") {
+  var directions = input.split("\n")[0];
+
+  var mapping = [];
+  input
+    .split("\n")
+    .slice(2)
+    .forEach((line) => (mapping[line.slice(0, 3)] = [line.slice(7, 10), line.slice(12, 15)]));
+
+  //console.log(mapping);
+
+  var stepNumber = 0;
+  var stepCycles = 0;
+  var currentNode = "AAA";
+  while (currentNode != "ZZZ") {
+    let direction = directions[stepNumber];
+    currentNode = mapping[currentNode][direction === "L" ? 0 : 1];
+    stepNumber++;
+    if (stepNumber == directions.length) {
+      stepCycles++;
+      stepNumber = 0;
+    }
+
+    //   if (stepCycles === 0 || stepCycles === 636000) {
+    //     console.log(Date());
+    //   }
+  }
+
+  console.log(stepCycles);
+  console.log(stepNumber);
+  console.log(`Answer A: ${stepCycles * directions.length + stepNumber}`);
+}
+
+if (false) {
+  input = `LR
+
+11A = (11B, XXX)
+11B = (XXX, 11Z)
+11Z = (11B, XXX)
+22A = (22B, XXX)
+22B = (22C, 22C)
+22C = (22Z, 22Z)
+22Z = (22B, 22B)
+XXX = (XXX, XXX)`;
+}
+
 var directions = input.split("\n")[0];
 
 var mapping = [];
@@ -793,23 +839,63 @@ input
 
 //console.log(mapping);
 
+let currentNodes = Object.keys(mapping).filter((k) => k[2] === 'A');
+
+let endStates = currentNodes.map(n => []);
+
 var stepNumber = 0;
 var stepCycles = 0;
-var currentNode = "AAA";
-while (currentNode != "ZZZ") {
-  let direction = directions[stepNumber];
-  currentNode = mapping[currentNode][direction === "L" ? 0 : 1];
-  stepNumber++;
-  if (stepNumber == directions.length) {
-    stepCycles++;
-    stepNumber = 0;
-  }
+while (currentNodes.filter(n => n[2] !== 'Z').length > 0) {
+    let direction = directions[stepNumber];
+    currentNodes = currentNodes.map(cn => mapping[cn][direction === 'L' ? 0 : 1]);
+    stepNumber++;
+    if (stepNumber == directions.length) {
+      stepCycles++;
+      stepNumber = 0;
+    }
 
-//   if (stepCycles === 0 || stepCycles === 636000) {
-//     console.log(Date());
-//   }
+    for (let i = 0; i < currentNodes.length; i++) {
+      if (currentNodes[i][2] === 'Z') {
+        endStates[i].push((stepCycles * directions.length) + stepNumber);
+      }
+    }
+
+    if (stepCycles === 26635) {
+      break;
+    }
+    //   if (stepCycles === 0 || stepCycles === 636000) {
+    //     console.log(Date());
+    //   }
 }
 
-console.log(stepCycles);
-console.log(stepNumber);
-console.log(`Answer A: ${(stepCycles * directions.length) + stepNumber}`);
+
+var frequencies = endStates.map(es => es[1] - es[0]);
+console.log(frequencies);
+
+//https://stackoverflow.com/questions/34953778/calculate-the-lcm-of-two-or-three-numbers-in-javascript
+function gcd2(a, b) {
+  // Greatest common divisor of 2 integers
+  if(!b) return b===0 ? a : NaN;
+  return gcd2(b, a%b);
+}
+function gcd(array) {
+  // Greatest common divisor of a list of integers
+  var n = 0;
+  for(var i=0; i<array.length; ++i)
+    n = gcd2(array[i], n);
+  return n;
+}
+function lcm2(a, b) {
+  // Least common multiple of 2 integers
+  return a*b / gcd2(a, b);
+}
+function lcm(array) {
+  // Least common multiple of a list of integers
+  var n = 1;
+  for(var i=0; i<array.length; ++i)
+    n = lcm2(array[i], n);
+  return n;
+}
+
+console.log(`answer b: ${lcm(frequencies)}`);
+

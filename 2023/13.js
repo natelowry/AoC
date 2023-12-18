@@ -1,5 +1,4 @@
-var input = 
-`#..###..#####
+var input = `#..###..#####
 ###..#.......
 .##.#.#.###..
 #####....####
@@ -1440,6 +1439,7 @@ if (false) {
 var patterns = input.split("\n\n");
 
 function reflectsLeftOfColumn(pattern, column) {
+  var offBy = 0;
   var searchWidth = Math.min(column, pattern[0].length - column);
   for (let y = 0; y < pattern.length; y++) {
     for (let xOffset = 0; xOffset < searchWidth; xOffset++) {
@@ -1447,14 +1447,17 @@ function reflectsLeftOfColumn(pattern, column) {
       let charRight = pattern[y][column + xOffset];
 
       if (charLeft !== charRight) {
-        return false;
+        //for b we should count the off numbers and keep track of those
+        // return false;
+        offBy++;
       }
     }
   }
-  return true;
+  return offBy;
 }
 
 function reflectsAboveRow(pattern, row) {
+  var offBy = 0;
   var searchHeight = Math.min(row, pattern.length - row);
   for (let x = 0; x < pattern[0].length; x++) {
     for (let yOffset = 0; yOffset < searchHeight; yOffset++) {
@@ -1462,11 +1465,12 @@ function reflectsAboveRow(pattern, row) {
       let charBelow = pattern[row + yOffset][x];
 
       if (charAbove !== charBelow) {
-        return false;
+        //return false;
+        offBy++;
       }
     }
   }
-  return true;
+  return offBy;
 }
 
 var total = 0;
@@ -1476,8 +1480,8 @@ for (let i = 0; i < patterns.length; i++) {
 
   //check columns
   for (let x = 1; x < pattern[0].length; x++) {
-    const isReflectedAtColumn = reflectsLeftOfColumn(pattern, x);
-    if (isReflectedAtColumn) {
+    const offAtThisColumn = reflectsLeftOfColumn(pattern, x);
+    if (offAtThisColumn === 1) {
       console.log(`is reflected left of column ${x}`);
       total += x;
     }
@@ -1485,8 +1489,8 @@ for (let i = 0; i < patterns.length; i++) {
 
   //check rows
   for (let y = 1; y < pattern.length; y++) {
-    const isReflectedAtRow = reflectsAboveRow(pattern, y);
-    if (isReflectedAtRow) {
+    const offAtThisRow = reflectsAboveRow(pattern, y);
+    if (offAtThisRow === 1) {
       console.log(`is reflected above row ${y}`);
       total += y * 100;
     }

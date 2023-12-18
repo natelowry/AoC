@@ -1016,7 +1016,7 @@ function cardRank(card) {
     case "Q":
       return 12;
     case "J":
-      return 11;
+      return 0;
     case "T":
       return 10;
     default:
@@ -1036,22 +1036,29 @@ for (let i = 0; i < hands.length; i++) {
     }
     cardCount[c] += 1;
   });
+
+  var numberOfJokers = cardCount["J"] || 0;
+  cardCount["J"] = 0;
+
   //console.log(cardCount);
   let sortedCounts = Object.keys(cardCount)
     .map((x) => cardCount[x])
     .sort()
     .reverse();
-  if (sortedCounts[0] === 5) {
+
+  var highSortedCount = sortedCounts[0] + numberOfJokers;
+
+  if (highSortedCount === 5) {
     hands[i].rank = 7;
-  } else if (sortedCounts[0] === 4) {
+  } else if (highSortedCount === 4) {
     hands[i].rank = 6;
-  } else if (sortedCounts[0] === 3 && sortedCounts[1] === 2) {
+  } else if (highSortedCount === 3 && sortedCounts[1] === 2) {
     hands[i].rank = 5;
-  } else if (sortedCounts[0] === 3) {
+  } else if (highSortedCount === 3) {
     hands[i].rank = 4;
-  } else if (sortedCounts[0] === 2 && sortedCounts[1] === 2) {
+  } else if (highSortedCount === 2 && sortedCounts[1] === 2) {
     hands[i].rank = 3;
-  } else if (sortedCounts[0] === 2) {
+  } else if (highSortedCount === 2) {
     hands[i].rank = 2;
   } else {
     hands[i].rank = 1;
@@ -1084,3 +1091,5 @@ var sortedHands = hands.sort((a, b) => {
 
 var answerA = sortedHands.map((val, idx) => (idx + 1) * val.bid).reduce((prev, curr) => prev + curr);
 console.log(`Answer a: ${answerA}`);
+
+//too low? 254056319

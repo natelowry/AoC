@@ -139,17 +139,65 @@ J-LF|.|7|7|L-F-77-L-.|LJL7LLF.|JJ.L--J7JJ|LJFLF777LL-J-F.|-7JFJ.|FJ|L-7F7||-|7|-
 LF.FJF7-|-L--FL7L-7|-F.F-JL|.LF7F7L7-7JJFLLFFJ.LJ7-L|FF|F|.|7|.7J7...|LLL-F-7J.JFFF-7F.LFJJ-7.|7L7JLF7|F|J.|F7FJ...J||JJFF7LJF.FL7L-J.L-77|7
 F--JJL-7J|LJLJJLF-L7---J-|.J-.JLJJLL7JL7JJ.7.L|LLJ-.L-J-7J-L7LLJ---FJ-LJJ..JLL7.L-JLLLL-7-FJLF77L---7JJLJ.LFJL--F-F-JJ.LLJ|-F7-JJ.JJ.JJF7--7`;
 
+var start = "L";
+var startY = 95;
+var startX = 74;
 if (false) {
   input = `.....
 .S-7.
 .|.|.
 .L-J.
 .....`;
+  start = "F";
+  startY = 1;
+  startX = 1;
   input = `..F7.
 .FJ|.
 SJ.L7
 |F--J
 LJ...`;
+  start = "F";
+  startY = 2;
+  startX = 0;
+  input = `...........
+.S-------7.
+.|F-----7|.
+.||.....||.
+.||.....||.
+.|L--7F-J|.
+.|..FJ|..|.
+.L--J.L--J.
+...........`;
+  start = "F";
+  startY = 1;
+  startX = 1;
+  input = `.F----7F7F7F7F-7....
+.|F--7||||||||FJ....
+.||.FJ||||||||L7....
+FJL7L7LJLJ||LJ.L-7..
+L--J.L7...LJS7F-7L7.
+....F-J..F7FJ|L7L7L7
+....L7.F7||L7|.L7L7|
+.....|FJLJ|FJ|F7|.LJ
+....FJL-7.||.||||...
+....L---J.LJ.LJLJ...`;
+  start = "F";
+  startY = 4;
+  startX = 12;
+
+  input = `FF7FSF7F7F7F7F7F---7
+L|LJ||||||||||||F--J
+FL-7LJLJ||||||LJL-77
+F--JF--7||LJLJ7F7FJ-
+L---JF-JLJ.||-FJLJJ7
+|F|F-JF---7F7-L7L|7|
+|FFJF7L7F-JF7|JL---7
+7-L-JL7||F7|L7F-7F7|
+L.L7LFJ|||||FJL7||LJ
+L7JLJL-JLJLJL--JLJ.L`;
+  start = "7";
+  startY = 0;
+  startX = 4;
 }
 
 const Directions = {
@@ -162,11 +210,13 @@ const Directions = {
 const splitInput = input.split("\n");
 const height = splitInput.length;
 const width = splitInput[0].length;
-var theMaze = splitInput.map((line, y) => [...line].map((char, x) => ({ x, y, char, checked: false, step: 0 })));
+var theMaze = splitInput.map((line, y) =>
+  [...line].map((char, x) => ({ x, y, char: char === "S" ? start : char, checked: false, step: -1, inLoop: false }))
+);
 
 // console.log(theMaze);
 
-var current = theMaze.map((z) => z.filter((zz) => zz.char === "S")).filter((zz) => zz.length)[0][0];
+var current = theMaze[startY][startX]; //.map((z) => z.filter((zz) => zz.char === "S")).filter((zz) => zz.length)[0][0];
 
 followThePipeAroundThisNode(current);
 
@@ -175,7 +225,7 @@ function followThePipeAroundThisNode(current) {
   const ogY = current.y;
   var currentStep = 0;
   current.step = currentStep++;
-//   var entryDir = Directions.S;
+  //   var entryDir = Directions.S;
   var entryDir = Directions.N;
   if (["7", "F"].includes(current.char)) {
     entryDir = Directions.S;
@@ -190,7 +240,7 @@ function followThePipeAroundThisNode(current) {
   current = theMaze[current.y + yOffset][current.x + xOffset];
   current.checked = true;
   current.step = currentStep++;
-//   console.log(current);
+  //   console.log(current);
   while (current.x !== ogX || current.y !== ogY) {
     [xOffset, yOffset, entryDir] = getOffsets(current.char, entryDir);
     if (isNaN(xOffset + yOffset)) {
@@ -210,14 +260,14 @@ function getOffsets(char, enteringFrom) {
     case "-": //horizontal
       return enteringFrom === Directions.W ? [1, 0, Directions.W] : [-1, 0, Directions.E];
     case "L": //90 N/E
-    case "S": //TODO: figure this out?
-    return enteringFrom === Directions.N ? [1, 0, Directions.W] : [0, -1, Directions.S];
+      // case "S": //TODO: figure this out?
+      return enteringFrom === Directions.N ? [1, 0, Directions.W] : [0, -1, Directions.S];
     case "J": //90 N/W
-    return enteringFrom === Directions.N ? [-1, 0, Directions.E] : [0, -1, Directions.S];
+      return enteringFrom === Directions.N ? [-1, 0, Directions.E] : [0, -1, Directions.S];
     case "7": //90 S/W
-    return enteringFrom === Directions.S ? [-1, 0, Directions.E] : [0, 1, Directions.N];
+      return enteringFrom === Directions.S ? [-1, 0, Directions.E] : [0, 1, Directions.N];
     case "F": //90 S/E
-    // case "S": //TODO: figure this out?
+      // case "S": //TODO: figure this out?
       return enteringFrom === Directions.S ? [1, 0, Directions.W] : [0, 1, Directions.N];
     default:
       return [NaN, NaN];
@@ -225,4 +275,78 @@ function getOffsets(char, enteringFrom) {
 }
 
 // console.log(theMaze);
-console.log(current.step / 2);
+console.log(`answer a: ${current.step / 2}`);
+
+// .....
+// .F-7. out F->7 out
+// .|.|.
+// .L-J. out L->J out
+// .....
+
+// ..F7. out F->F out
+// .FJ|. out F->J in
+// FJ.L7 out F->J in | in L->7 out
+// |F--J in F->J out
+// LJ... out L->J out
+
+// ...........
+// .F-------7.  out F->7 out
+// .|F-----7|.  in, F->7 in
+// .||.....||.
+// .||.....||.
+// .|L-7.F-J|.  in, L->7 out | out F->J in
+// .|..|.|..|.
+// .L--J.L--J.  out L->J out |
+// ...........
+
+console.log(theMaze.map((row) => row.map((x) => (x.inLoop ? "X" : x.char)).join("")).join("\n"));
+
+for (let y = 0; y < theMaze.length; y++) {
+  var wereInTheLoop = false;
+  var lastCorner = "";
+  for (let x = 0; x < theMaze[0].length; x++) {
+    var current = theMaze[y][x];
+
+    if (["F", "J", "7", "L"].indexOf(current.char) >= 0 && current.step !== -1) {
+      switch (current.char) {
+        case "F":
+          break;
+        case "J":
+          if (lastCorner === "F") {
+            wereInTheLoop = !wereInTheLoop;
+            console.log(`we hit a F->J at ${current.x}, ${current.y}, flipping inLoop to ${wereInTheLoop}`);
+          }
+          break;
+        case "7":
+          if (lastCorner === "L") {
+            wereInTheLoop = !wereInTheLoop;
+            console.log(`we hit a 7->L at ${current.x}, ${current.y}, flipping inLoop to ${wereInTheLoop}`);
+          }
+          break;
+        case "L":
+          break;
+        default:
+          break;
+      }
+      lastCorner = current.char;
+    }
+
+    //verts that are part of the loop are counted
+    if (current.char === "|" && current.step !== -1) {
+      wereInTheLoop = !wereInTheLoop;
+      console.log(`we hit a | at ${current.x}, ${current.y}, flipping inLoop to ${wereInTheLoop}`);
+    }
+    //count either dots or unconnected parts of the loop
+    if (wereInTheLoop && current.char === ".") {
+      console.log(`. ${current.x}, ${current.y} is in the loop`);
+      current.inLoop = true;
+    }
+    if (wereInTheLoop && current.char !== "." && current.step === -1) {
+      console.log(`${current.char} ${current.x}, ${current.y} is in the loop`);
+      current.inLoop = true;
+    }
+  }
+}
+
+console.log(theMaze.map((row) => row.map((x) => (x.inLoop ? "X" : x.char)).join("")).join("\n"));
+console.log(theMaze.flatMap((x) => x.map((y) => y.inLoop)).filter((x) => x).length);

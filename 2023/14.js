@@ -112,36 +112,136 @@ O.#..O.#.#
 #OO..#....`;
 }
 
+const Direction = {
+  N: 0,
+  W: 1,
+  S: 2,
+  E: 3,
+};
+
 var table = input.split("\n").map((x) => [...x]);
 console.log(table.map((r) => r.join("")).join("\n"));
 
-//let's tilt north
-for (let y = 0; y < table.length; y++) {
-  for (let x = 0; x < table[0].length; x++) {
-    let currentChar = table[y][x];
-    if (currentChar !== "O") {
-      continue;
-    }
-    //at the top
-    if (y === 0) {
-      continue;
-    }
+function tilt(direction) {
+  var startY = 0;
+  var endY = table.length;
+  var yStep = 1;
+  var startX = 0;
+  var endX = table[0].length;
+  var xStep = 1;
 
-    //slide up
-    var nextY = y - 1;
-    while (nextY >= 0 && table[nextY][x] === ".") {
-      table[nextY][x] = "O";
-      table[nextY + 1][x] = ".";
-      nextY -= 1;
+  switch (direction) {
+    case Direction.N:
+      break;
+    case Direction.S:
+      startY = table.length - 1;
+      endY = -1;
+      yStep = -1;
+      break;
+    case Direction.E:
+      startX = table[0].length - 1;
+      endX = -1;
+      xStep = -1;
+      break;
+    case Direction.W:
+      break;
+  }
+
+  for (let y = startY; y !== endY; y += yStep) {
+    for (let x = startX; x !== endX; x += xStep) {
+      let currentChar = table[y][x];
+      if (currentChar !== "O") {
+        continue;
+      }
+
+      var nextX = x;
+      var nextY = y;
+      var oldX = x;
+      var oldY = y;
+
+      oldX = nextX;
+      oldY = nextY;
+      switch (direction) {
+        case Direction.N:
+          nextY = y - 1;
+          break;
+        case Direction.S:
+          nextY = y + 1;
+          break;
+        case Direction.E:
+          nextX = x + 1;
+          break;
+        case Direction.W:
+          nextX = x - 1;
+          break;
+      }
+
+      while (
+        nextY >= 0 &&
+        nextY < table.length &&
+        nextX >= 0 &&
+        nextX < table[0].length &&
+        table[nextY][nextX] === "."
+      ) {
+        table[nextY][nextX] = "O";
+        table[oldY][oldX] = ".";
+        oldX = nextX;
+        oldY = nextY;
+        switch (direction) {
+          case Direction.N:
+            nextY = oldY - 1;
+            break;
+          case Direction.S:
+            nextY = oldY + 1;
+            break;
+          case Direction.E:
+            nextX = oldX + 1;
+            break;
+          case Direction.W:
+            nextX = oldX - 1;
+            break;
+        }
+      }
     }
   }
 }
+
+var tilts = [];
+//f = 260
+//remainder = 4000000000 % 260 = 100
+//
+var freqTimes1000PlusMod = 26100;
+
+for (let i = 0; i < 4000000000; i++) {
+  tilt(i % 4);
+  tilts[i] = table.map((r) => r.join("")).join("\n");
+
+  if (i == (freqTimes1000PlusMod-1)) {
+    break;
+  }
+}
+
+//figure out the frequency of boards
+
+for (let f = 1; f < 1000; f++) {
+  var validFrequency = true;
+  for (let z = 1; z < 1000; z++) {
+    if (tilts[tilts.length - z] !== tilts[tilts.length - (f+z)]) {
+      validFrequency = false;
+    }
+  }
+  if (validFrequency) {
+    console.log(`frequency: ${f}`);
+    break;
+  }
+}
+
 
 var total = 0;
 for (let y = 0; y < table.length; y++) {
   for (let x = 0; x < table[0].length; x++) {
     if (table[y][x] === "O") {
-        total += (table.length - y);
+      total += table.length - y;
     }
   }
 }
